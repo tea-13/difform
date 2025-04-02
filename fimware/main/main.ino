@@ -139,35 +139,16 @@ void read_IMU()
 
 void calibrate_IMU()
 {
-  Serial.println("КАЛИБРОВКА:");
-  Serial.println("Установите модуль осью Z вверх.");
-  Serial.println("Модуль должен быть неподвижен. Калибровка начнётся через 3 сек.");
-  delay(3000);
-    
-  Serial.println("Акселерометр...");
+  logger_print(2, "MSG", "Start IMU calibration");
+  delay(1500);
+
   ACC.setFastOffset();
-  Serial.println("Гироскоп...");
   GYRO.setFastOffset();
-    
-  Serial.println("Начинаем калибровку магнитометра...");
-  Serial.println("Вращайте модуль так чтоб все его оси побывали во всех направлениях");
-  Serial.println("Калибровка закончится через 30 сек.");
   
-  uint32_t i = millis();
-  while( (millis()-i) < 30000 ){
-    MAG.setFastOffset();
-  }
-  Serial.println("Калибровка магнитометра завершена.");
+  float data[3] = {256.25, 1186.25, 83.12};
+  MAG.setFastOffset(data);
     
-  float data[3];
-  MAG.getFastOffset(data);
-  for (int i=0; i<3; i++) Serial.printf("%.2f ", data[i]);
-  Serial.println();
-    
-  // float data[3]={-12.5,63.7,-10.6};
-  // MAG.setFastOffset(data);
-    
-  Serial.println("Готово."); 
+  logger_print(2, "MSG", "Done IMU calibration");
 }
 
 
